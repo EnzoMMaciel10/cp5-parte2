@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meus pedidos | Mercado Express</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+
+    <a th:href="@{/mercado}">Produtos</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2>Meus pedidos</h2>
+
+    <p th:if="${#lists.isEmpty(pedidos)}">
+        Você ainda não fez nenhum pedido.
+    </p>
+
+    <section th:each="pedido : ${pedidos}">
+        <h3 th:text="|Pedido #${pedido.id}|">Pedido #1</h3>
+
+        <p>
+            Status:
+            <strong th:text="${pedido.status}">
+                AGUARDANDO_PAGAMENTO
+            </strong>
+        </p>
+
+        <table>
+            <caption th:text="|Itens do pedido #${pedido.id}|">
+                Itens do pedido
+            </caption>
+
+            <thead>
+            <tr>
+                <th scope="col">Produto</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Preço unitário</th>
+                <th scope="col">Subtotal</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="item : ${pedido.itens}">
+                <td th:text="${item.nomeProduto}">Arroz integral</td>
+
+                <td th:text="${item.quantidade}">2</td>
+
+                <td th:text="|R$ ${#numbers.formatDecimal(item.precoUnitario, 1, 'POINT', 2, 'COMMA')}|">
+                    R$ 25,90
+                </td>
+
+                <td th:text="|R$ ${#numbers.formatDecimal(item.subtotal, 1, 'POINT', 2, 'COMMA')}|">
+                    R$ 51,80
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>
+            Total:
+            <strong th:text="|R$ ${#numbers.formatDecimal(pedido.total, 1, 'POINT', 2, 'COMMA')}|">
+                R$ 51,80
+            </strong>
+        </p>
+
+        <hr>
+    </section>
+</main>
+
+</body>
+</html>

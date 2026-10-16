@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Novo pedido | Mercado Express</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+
+    <a th:href="@{/mercado}">Voltar para os produtos</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2>Novo pedido</h2>
+
+    <h3 th:text="${produto.nome}">Nome do produto</h3>
+
+    <dl>
+        <dt>Preço por unidade</dt>
+        <dd th:text="|R$ ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}|">
+            R$ 25,90
+        </dd>
+
+        <dt>Tamanho ou embalagem</dt>
+        <dd th:text="${produto.tamanho}">5 kg</dd>
+
+        <dt>Quantidade disponível</dt>
+        <dd th:text="${produto.estoque}">30</dd>
+    </dl>
+
+    <div role="alert"
+         th:if="${erro != null}"
+         th:text="${erro}">
+    </div>
+
+    <form th:action="@{/pedidos}"
+          th:object="${pedidoForm}"
+          method="post">
+
+        <input type="hidden" th:field="*{produtoId}">
+
+        <div>
+            <label for="quantidade">Quantidade desejada:</label>
+
+            <input type="number"
+                   id="quantidade"
+                   th:field="*{quantidade}"
+                   min="1"
+                   max="2147483647"
+                   step="1"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('quantidade')}"
+               th:errors="*{quantidade}">
+            </p>
+        </div>
+
+        <p>
+            O pedido será criado aguardando pagamento.
+            Esta etapa não realiza cobrança nem reserva o estoque.
+        </p>
+
+        <button type="submit"
+                th:disabled="${produto.estoque == null or produto.estoque <= 0}">
+            Criar pedido
+        </button>
+
+        <a th:href="@{/mercado}">Cancelar</a>
+    </form>
+</main>
+
+</body>
+</html>

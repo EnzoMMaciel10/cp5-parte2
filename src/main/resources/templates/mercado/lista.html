@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Produtos | Mercado Express</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+
+    <a th:href="@{/}">Início</a>
+
+    <p>Gerenciamento de produtos do mercado de alimentos.</p>
+
+    <p>
+        Conectado como:
+        <strong sec:authentication="name">usuario@exemplo.com</strong>
+    </p>
+
+    <p sec:authorize="hasRole('ADMIN')">
+        Perfil: Administrador
+    </p>
+
+    <p sec:authorize="hasRole('CLIENTE')">
+        Perfil: Cliente
+    </p>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2>Produtos cadastrados</h2>
+
+    <p>
+        <a th:href="@{/pedidos}">Meus pedidos</a>
+    </p>
+
+    <p sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/mercado/novo}">Cadastrar produto</a>
+    </p>
+
+    <div role="status"
+         th:if="${sucesso != null}"
+         th:text="${sucesso}">
+    </div>
+
+    <div role="alert"
+         th:if="${erro != null}"
+         th:text="${erro}">
+    </div>
+
+    <form th:action="@{/mercado}" method="get">
+        <label for="busca">Buscar produto por nome:</label>
+
+        <input type="search"
+               id="busca"
+               name="busca"
+               th:value="${busca}"
+               placeholder="Ex.: Arroz">
+
+        <button type="submit">Buscar</button>
+
+        <a th:href="@{/mercado}">Limpar busca</a>
+    </form>
+
+    <br>
+
+    <table>
+        <caption>Produtos e disponibilidade em estoque</caption>
+
+        <thead>
+        <tr>
+            <th scope="col">Nome</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Setor</th>
+            <th scope="col">Tamanho</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Estoque</th>
+            <th scope="col">Ações</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:if="${#lists.isEmpty(mercados)}">
+            <td colspan="7">Nenhum produto encontrado.</td>
+        </tr>
+
+        <tr th:each="produto : ${mercados}">
+            <td th:text="${produto.nome}">Arroz</td>
+            <td th:text="${produto.tipo}">Alimento</td>
+            <td th:text="${produto.setor}">Mercearia</td>
+            <td th:text="${produto.tamanho}">5 kg</td>
+
+            <td th:text="|R$ ${#numbers.formatDecimal(produto.preco, 1, 'POINT', 2, 'COMMA')}|">
+                R$ 25,90
+            </td>
+
+            <td th:text="${produto.estoque}">30</td>
+
+            <td>
+                <a th:href="@{/mercado/detalhes/{id}(id=${produto.id})}">
+                    Detalhes
+                </a>
+
+                <a sec:authorize="hasAnyRole('ADMIN', 'CLIENTE')"
+                   th:if="${produto.estoque != null and produto.estoque > 0}"
+                   th:href="@{/pedidos/novo(produtoId=${produto.id})}">
+                    Fazer pedido
+                </a>
+
+                <span th:if="${produto.estoque == null or produto.estoque <= 0}">
+                    Sem estoque
+                </span>
+
+                <a sec:authorize="hasRole('ADMIN')"
+                   th:href="@{/mercado/editar/{id}(id=${produto.id})}">
+                    Editar
+                </a>
+
+                <form sec:authorize="hasRole('ADMIN')"
+                      th:action="@{/mercado/excluir/{id}(id=${produto.id})}"
+                      method="post"
+                      onsubmit="return confirm('Deseja excluir este produto?');">
+
+                    <button type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar conta | Mercado Express</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+</header>
+
+<main>
+    <h2>Criar conta</h2>
+    <p>Preencha seus dados para se cadastrar como cliente.</p>
+
+    <div role="alert"
+         th:if="${erro != null}"
+         th:text="${erro}">
+    </div>
+
+    <form th:action="@{/cadastro}"
+          th:object="${cadastro}"
+          method="post">
+
+        <div>
+            <label for="nome">Nome:</label>
+            <input type="text"
+                   id="nome"
+                   th:field="*{nome}"
+                   maxlength="100"
+                   autocomplete="name"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('nome')}"
+               th:errors="*{nome}"></p>
+        </div>
+
+        <div>
+            <label for="email">E-mail:</label>
+            <input type="email"
+                   id="email"
+                   th:field="*{email}"
+                   maxlength="150"
+                   autocomplete="email"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('email')}"
+               th:errors="*{email}"></p>
+        </div>
+
+        <div>
+            <label for="senha">Senha:</label>
+            <input type="password"
+                   id="senha"
+                   name="senha"
+                   minlength="8"
+                   maxlength="72"
+                   autocomplete="new-password"
+                   aria-describedby="senha-ajuda"
+                   required>
+
+            <p id="senha-ajuda">Use pelo menos 8 caracteres.</p>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('senha')}"
+               th:errors="*{senha}"></p>
+        </div>
+
+        <button type="submit">Criar conta</button>
+    </form>
+
+    <p>
+        Já possui uma conta?
+        <a th:href="@{/login}">Entrar</a>
+    </p>
+</main>
+
+</body>
+</html>

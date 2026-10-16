@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: cp5
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cp5
+    username: postgres
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+
+  thymeleaf:
+    cache: false
+
+server:
+  port: 8080

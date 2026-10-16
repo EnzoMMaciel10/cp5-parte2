@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso negado | Mercado Express</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+    <a th:href="@{/}">Início</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2>Acesso negado</h2>
+
+    <p>
+        Sua conta não tem permissão para acessar esta página
+        ou realizar esta operação.
+    </p>
+
+    <p>
+        O cadastro, a edição e a exclusão de produtos
+        estão disponíveis apenas para administradores.
+    </p>
+
+    <a th:href="@{/mercado}">Voltar para os produtos</a>
+</main>
+
+</body>
+</html>

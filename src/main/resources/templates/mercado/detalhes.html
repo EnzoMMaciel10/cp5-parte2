@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${mercado.nome} + ' | Mercado Express'">
+        Detalhes | Mercado Express
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+    <a th:href="@{/mercado}">Voltar para os produtos</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2>Detalhes do produto</h2>
+
+    <h3 th:text="${mercado.nome}">Nome do produto</h3>
+
+    <dl>
+        <dt>Código</dt>
+        <dd th:text="${mercado.id}">1</dd>
+
+        <dt>Tipo</dt>
+        <dd th:text="${mercado.tipo}">Alimento</dd>
+
+        <dt>Setor</dt>
+        <dd th:text="${mercado.setor}">Mercearia</dd>
+
+        <dt>Tamanho ou embalagem</dt>
+        <dd th:text="${mercado.tamanho}">5 kg</dd>
+
+        <dt>Preço de venda</dt>
+        <dd th:text="|R$ ${#numbers.formatDecimal(mercado.preco, 1, 'POINT', 2, 'COMMA')}|">
+            R$ 25,90
+        </dd>
+
+        <dt>Quantidade em estoque</dt>
+        <dd th:text="${mercado.estoque}">30</dd>
+    </dl>
+
+    <p th:if="${mercado.estoque == 0}">
+        Produto sem estoque no momento.
+    </p>
+
+    <div>
+        <a sec:authorize="hasRole('ADMIN')"
+           th:href="@{/mercado/editar/{id}(id=${mercado.id})}">
+            Editar produto
+        </a>
+
+        <a th:href="@{/mercado}">
+            Voltar
+        </a>
+    </div>
+
+    <form sec:authorize="hasRole('ADMIN')"
+          th:action="@{/mercado/excluir/{id}(id=${mercado.id})}"
+          method="post"
+          onsubmit="return confirm('Deseja excluir este produto?');">
+
+        <button type="submit">Excluir produto</button>
+    </form>
+</main>
+
+</body>
+</html>

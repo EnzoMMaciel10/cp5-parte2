@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo} + ' | Mercado Express'">
+        Produto | Mercado Express
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header>
+    <h1>Mercado Express</h1>
+
+    <a th:href="@{/mercado}">Voltar para os produtos</a>
+
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+    </form>
+</header>
+
+<main>
+    <h2 th:text="${titulo}">Cadastro de produto</h2>
+    <p>Preencha todos os campos abaixo.</p>
+
+    <form th:action="@{${acao}}"
+          th:object="${mercado}"
+          method="post">
+
+        <div>
+            <label for="nome">Nome do produto:</label>
+            <input type="text"
+                   id="nome"
+                   th:field="*{nome}"
+                   maxlength="100"
+                   placeholder="Ex.: Arroz integral"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('nome')}"
+               th:errors="*{nome}"></p>
+        </div>
+
+        <div>
+            <label for="tipo">Tipo:</label>
+            <input type="text"
+                   id="tipo"
+                   th:field="*{tipo}"
+                   maxlength="60"
+                   placeholder="Ex.: Alimento"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('tipo')}"
+               th:errors="*{tipo}"></p>
+        </div>
+
+        <div>
+            <label for="setor">Setor:</label>
+            <input type="text"
+                   id="setor"
+                   th:field="*{setor}"
+                   maxlength="60"
+                   placeholder="Ex.: Mercearia"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('setor')}"
+               th:errors="*{setor}"></p>
+        </div>
+
+        <div>
+            <label for="tamanho">Tamanho ou embalagem:</label>
+            <input type="text"
+                   id="tamanho"
+                   th:field="*{tamanho}"
+                   maxlength="40"
+                   placeholder="Ex.: 5 kg, 1 L ou pacote de 500 g"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('tamanho')}"
+               th:errors="*{tamanho}"></p>
+        </div>
+
+        <div>
+            <label for="preco">Preço de venda (R$):</label>
+            <input type="number"
+                   id="preco"
+                   th:field="*{preco}"
+                   min="0.01"
+                   max="9999999999.99"
+                   step="0.01"
+                   placeholder="Ex.: 25.90"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('preco')}"
+               th:errors="*{preco}"></p>
+        </div>
+
+        <div>
+            <label for="custo">Custo de aquisição (R$):</label>
+            <input type="number"
+                   id="custo"
+                   th:field="*{custo}"
+                   min="0"
+                   max="9999999999.99"
+                   step="0.01"
+                   placeholder="Ex.: 18.00"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('custo')}"
+               th:errors="*{custo}"></p>
+        </div>
+
+        <div>
+            <label for="estoque">Quantidade em estoque:</label>
+            <input type="number"
+                   id="estoque"
+                   th:field="*{estoque}"
+                   min="0"
+                   max="2147483647"
+                   step="1"
+                   placeholder="Ex.: 30"
+                   required>
+
+            <p role="alert"
+               th:if="${#fields.hasErrors('estoque')}"
+               th:errors="*{estoque}"></p>
+        </div>
+
+        <div>
+            <button type="submit">Salvar produto</button>
+            <a th:href="@{/mercado}">Cancelar</a>
+        </div>
+
+    </form>
+</main>
+
+</body>
+</html>
