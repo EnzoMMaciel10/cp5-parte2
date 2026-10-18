@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="page-form">
 
 <header>
     <h1>Mercado Express</h1>
@@ -67,10 +67,10 @@
             </p>
         </div>
 
-        <p>
-            O pedido será criado aguardando pagamento.
-            Esta etapa não realiza cobrança nem reserva o estoque.
-        </p>
+        <p><label><input type="checkbox" th:field="*{simularRecusa}">
+            Simular pagamento recusado pelo Banco Tranquilo</label></p>
+
+        <p>O pedido será enviado ao RabbitMQ para processamento pela API simulada do Banco Tranquilo.</p>
 
         <button type="submit"
                 th:disabled="${produto.estoque == null or produto.estoque <= 0}">

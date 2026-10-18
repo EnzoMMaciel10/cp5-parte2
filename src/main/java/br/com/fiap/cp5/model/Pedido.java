@@ -35,6 +35,18 @@ public class Pedido {
     @Column(nullable = false, length = 30)
     private StatusPedido status = StatusPedido.AGUARDANDO_PAGAMENTO;
 
+    @Column(unique = true, length = 36)
+    private String referenciaPagamento;
+
+    @Column(length = 80)
+    private String protocoloBanco;
+
+    @Column(length = 255)
+    private String motivoRecusa;
+
+    @Column(nullable = false)
+    private boolean simularRecusa;
+
     @OneToMany(
             mappedBy = "pedido",
             cascade = CascadeType.ALL,

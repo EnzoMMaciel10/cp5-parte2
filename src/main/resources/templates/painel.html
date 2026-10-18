@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de vendas | Mercado Express</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="page-dashboard">
+<header>
+    <h1>Mercado Express</h1>
+    <nav><a th:href="@{/mercado}">Produtos</a> <a th:href="@{/pedidos}">Meus pedidos</a></nav>
+    <form th:action="@{/logout}" method="post"><button type="submit">Sair</button></form>
+</header>
+<main>
+    <h2>Painel de vendas</h2>
+    <p>Pedidos aprovados, lucro e estoque atual.</p>
+    <div class="dashboard-cards">
+        <section><span>Pedidos</span><strong th:text="${resumo.pedidos}">0</strong></section>
+        <section><span>Aprovados</span><strong th:text="${resumo.aprovados}">0</strong></section>
+        <section><span>Recusados</span><strong th:text="${resumo.recusados}">0</strong></section>
+        <section><span>Faturamento</span><strong th:text="|R$ ${#numbers.formatDecimal(resumo.faturamento, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</strong></section>
+        <section><span>Lucro bruto</span><strong th:text="|R$ ${#numbers.formatDecimal(resumo.lucro, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</strong></section>
+    </div>
+    <h3>Vendas e estoque por produto</h3>
+    <p th:if="${#lists.isEmpty(resumo.produtos)}">Cadastre produtos para ver os gráficos.</p>
+    <div class="dashboard-chart" th:each="produto : ${resumo.produtos}">
+        <h4 th:text="${produto.nome}">Produto</h4>
+        <div class="chart-row"><span>Vendidos</span><div class="chart-track"><div class="chart-fill sales" th:style="|width: ${produto.vendasPercentual}%|"></div></div><strong th:text="${produto.vendidos}">0</strong></div>
+        <div class="chart-row"><span>Estoque</span><div class="chart-track"><div class="chart-fill stock" th:style="|width: ${produto.estoquePercentual}%|"></div></div><strong th:text="${produto.estoque}">0</strong></div>
+        <div class="chart-row"><span>Lucro</span><div class="chart-track"><div class="chart-fill profit" th:style="|width: ${produto.lucroPercentual}%|"></div></div><strong th:text="|R$ ${#numbers.formatDecimal(produto.lucro, 1, 'POINT', 2, 'COMMA')}|">R$ 0,00</strong></div>
+        <p th:text="|Receita: R$ ${#numbers.formatDecimal(produto.receita, 1, 'POINT', 2, 'COMMA')} · Lucro: R$ ${#numbers.formatDecimal(produto.lucro, 1, 'POINT', 2, 'COMMA')}|">Receita e lucro</p>
+    </div>
+    <h3>E-mails de confirmação</h3>
+    <p th:text="|Enviados: ${resumo.emailsEnviados} · Pendentes: ${resumo.emailsPendentes} · Falhas: ${resumo.emailsFalhos}|">Status dos e-mails</p>
+</main>
+</body>
+</html>

@@ -17,4 +17,6 @@ public class PedidoForm {
     @NotNull(message = "Informe a quantidade.")
     @Min(value = 1, message = "A quantidade deve ser pelo menos 1.")
     private Integer quantidade = 1;
+
+    private boolean simularRecusa;
 }

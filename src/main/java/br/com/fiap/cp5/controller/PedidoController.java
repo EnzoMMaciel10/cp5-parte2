@@ -3,6 +3,8 @@ package br.com.fiap.cp5.controller;
 import br.com.fiap.cp5.dto.PedidoForm;
 import br.com.fiap.cp5.service.MercadoService;
 import br.com.fiap.cp5.service.PedidoService;
+import br.com.fiap.cp5.service.PagamentoService;
+import org.springframework.amqp.AmqpException;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,13 +25,16 @@ public class PedidoController {
 
     private final PedidoService pedidoService;
     private final MercadoService mercadoService;
+    private final PagamentoService pagamentoService;
 
     public PedidoController(
             PedidoService pedidoService,
-            MercadoService mercadoService) {
+            MercadoService mercadoService,
+            PagamentoService pagamentoService) {
 
         this.pedidoService = pedidoService;
         this.mercadoService = mercadoService;
+        this.pagamentoService = pagamentoService;
     }
 
     @GetMapping
@@ -96,13 +101,23 @@ public class PedidoController {
             Long pedidoId = pedidoService.criarPedido(
                     principal.getName(),
                     formulario.getProdutoId(),
-                    formulario.getQuantidade()
+                    formulario.getQuantidade(),
+                    formulario.isSimularRecusa()
             );
+
+            try {
+                pagamentoService.solicitar(pedidoId, principal.getName());
+            } catch (AmqpException exception) {
+                redirectAttributes.addFlashAttribute("erro",
+                        "Pedido #" + pedidoId + " criado, mas o RabbitMQ está indisponível. "
+                        + "Reenvie o pagamento em Meus pedidos.");
+                return "redirect:/pedidos";
+            }
 
             redirectAttributes.addFlashAttribute(
                     "sucesso",
                     "Pedido #" + pedidoId
-                            + " criado com sucesso! Aguardando pagamento."
+                    + " criado! Pagamento enviado para processamento."
             );
 
             return "redirect:/mercado";
@@ -117,6 +132,19 @@ public class PedidoController {
 
             return "pedido/form";
         }
+    }
+
+    @PostMapping("/{id}/pagar")
+    public String reenviarPagamento(@org.springframework.web.bind.annotation.PathVariable Long id,
+                                    Principal principal, RedirectAttributes redirectAttributes) {
+        try {
+            pagamentoService.solicitar(id, principal.getName());
+            redirectAttributes.addFlashAttribute("sucesso", "Pagamento reenviado para processamento.");
+        } catch (IllegalArgumentException | AmqpException exception) {
+            redirectAttributes.addFlashAttribute("erro", exception instanceof AmqpException
+                    ? "RabbitMQ indisponível. Tente novamente." : exception.getMessage());
+        }
+        return "redirect:/pedidos";
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: banco-tranquilo-api
+server:
+  port: ${BANK_PORT:8081}
+banco-tranquilo:
+  api-key: ${BANK_API_KEY:demo-local}

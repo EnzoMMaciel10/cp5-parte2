@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="page-catalog">
 
 <header>
     <h1>Mercado Express</h1>
@@ -43,6 +43,7 @@
     <p>
         <a th:href="@{/pedidos}">Meus pedidos</a>
     </p>
+    <p sec:authorize="hasRole('ADMIN')"><a th:href="@{/painel}">Painel de vendas</a></p>
 
     <p sec:authorize="hasRole('ADMIN')">
         <a th:href="@{/mercado/novo}">Cadastrar produto</a>

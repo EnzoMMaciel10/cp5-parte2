@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 @Service
 public class PedidoService {
@@ -53,7 +54,8 @@ public class PedidoService {
     public Long criarPedido(
             String emailUsuario,
             Long produtoId,
-            Integer quantidade) {
+            Integer quantidade,
+            boolean simularRecusa) {
 
         if (emailUsuario == null || emailUsuario.isBlank()) {
             throw new IllegalArgumentException(
@@ -116,6 +118,8 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setUsuario(usuario);
         pedido.setStatus(StatusPedido.AGUARDANDO_PAGAMENTO);
+        pedido.setReferenciaPagamento(UUID.randomUUID().toString());
+        pedido.setSimularRecusa(simularRecusa);
 
         ItemPedido item = new ItemPedido();
         item.setProdutoId(produto.getId());

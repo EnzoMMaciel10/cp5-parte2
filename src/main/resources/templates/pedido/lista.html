@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
+<body class="page-orders">
 
 <header>
     <h1>Mercado Express</h1>
@@ -24,6 +24,9 @@
 <main>
     <h2>Meus pedidos</h2>
 
+    <div role="status" th:if="${sucesso != null}" th:text="${sucesso}"></div>
+    <div role="alert" th:if="${erro != null}" th:text="${erro}"></div>
+
     <p th:if="${#lists.isEmpty(pedidos)}">
         Você ainda não fez nenhum pedido.
     </p>
@@ -37,6 +40,12 @@
                 AGUARDANDO_PAGAMENTO
             </strong>
         </p>
+
+        <p th:if="${pedido.motivoRecusa != null}" th:text="${pedido.motivoRecusa}"></p>
+        <form th:if="${pedido.status.name() == 'AGUARDANDO_PAGAMENTO'}"
+              th:action="@{/pedidos/{id}/pagar(id=${pedido.id})}" method="post">
+            <button type="submit">Reenviar pagamento</button>
+        </form>
 
         <table>
             <caption th:text="|Itens do pedido #${pedido.id}|">
