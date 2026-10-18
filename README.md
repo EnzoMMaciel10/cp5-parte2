@@ -59,6 +59,8 @@ O painel mostra os totais e gráficos por produto. No exemplo, o pedido aprovado
    .\mvnw.cmd spring-boot:run
    ```
 
+   No IntelliJ IDEA, selecione o JDK 17 e execute `Cp5Application`. Com o `docker compose` ativo, o acesso ao PostgreSQL local já funciona sem configurar variáveis no IntelliJ. Para ver os e-mails no Mailpit, defina `MAIL_HOST=localhost` na configuração de execução.
+
 3. Em outro terminal, inicie o banco simulado:
 
    ```powershell
