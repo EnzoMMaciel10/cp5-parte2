@@ -1,0 +1,11 @@
+CP5 Java Advanced - Parte 2
+
+Integrantes:
+Enzo Monteiro Maciel - RM563734
+Matheus de Almeida Sousa - RM563557
+Paulo Estalise - RM563811
+Gabriel Bebé Silva - RM562012
+Emanuel Italo - RM561337
+
+Repositório: https://github.com/EnzoMMaciel10/cp5-parte2
+IDE: IntelliJ IDEA
