@@ -2,6 +2,10 @@
 
 Aplicação Spring Boot separada da [Parte 1](https://github.com/EnzoMMaciel10/cp5-parte1). Esta parte processa compras usando RabbitMQ, uma API **simulada** do Banco Tranquilo criada pelo grupo, e e-mail de confirmação. Também inclui um painel administrativo com vendas, lucro e estoque.
 
+- **Vídeo de demonstração das Partes 1 e 2:** [assistir no YouTube](https://youtu.be/vg6UIs_rz0o)
+- **Aplicação publicada da Parte 1 (Render):** [cp5-parte1.onrender.com](https://cp5-parte1.onrender.com/)
+- **Repositório da Parte 1:** [cp5-parte1](https://github.com/EnzoMMaciel10/cp5-parte1)
+
 ## Arquitetura
 
 ```text
